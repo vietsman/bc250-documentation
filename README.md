@@ -37,7 +37,7 @@ For more detail on the non-power pins, check [their section of the hardware page
    ^
 ```
 
-The `F*T` pins are the tachometer outputs from each respective fan, and the `F*P` pins are the PWM outputs that can be sued to control their speeds. Note that the `F1*` pins are electically connected to `CPU_FAN1`.
+The `F*T` pins are the tachometer outputs from each respective fan, and the `F*P` pins are the PWM outputs that can be used to control their speeds. Note that the `F1*` pins are electically connected to `CPU_FAN1`.
 
 # Memory
 - 16GB GDDR6 shared between the GPU and CPU. By default, this will be set to either 8GB/8GB (CPU/GPU) or 4GB/12GB, depending on your firmware revision, and requires flashing modified firmware to change. 
