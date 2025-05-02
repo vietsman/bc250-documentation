@@ -71,7 +71,9 @@ The `F*T` pins are the tachometer outputs from each respective fan, and the `F*P
 
 ## Simple setup script
 - This script is designed for Fedora 40+ and should set up everything needed properly, except for flashing the modified firmware. Run at your own risk.
-  - ``curl -s https://raw.githubusercontent.com/mothenjoyer69/bc250-documentation/refs/heads/main/fedora-setup.sh | sh``
+  - ``curl -s https://raw.githubusercontent.com/buoyantbeaver/bc250-documentation/refs/heads/main/fedora-setup.sh | sh`` 
+- This script is intended for Ubuntu 18.04+ and will set up everything required, except for flashing the modified firmware. Run at your own risk.
+  - ``curl -s https://raw.githubusercontent.com/buoyantbeaver/bc250-documentation/refs/heads/main/ubuntu-setup.sh | sh``
 - Credit to [neggles](https://github.com/neggles) for the original version.
   
 # Advanced
