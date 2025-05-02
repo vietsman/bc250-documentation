@@ -1,50 +1,52 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Ensure the script is executed as root
 if [[ $(id -u) != "0" ]]; then
-    echo 'Script must be run as root or with sudo!'
+    echo 'This script must be run as root or with sudo privileges.'
     exit 1
 fi
 
-# install patched mesa + block any updates from main repos
-echo -n "Adding mesa copr... "
+# Configure COPR repository and exclude Mesa packages from the official repositories
+echo -n "Configuring Mesa COPR repository... "
 if grep -q Nobara "/etc/system-release"; then
-    echo -n "Nobara detected... "
+    echo -n "Nobara Linux detected... "
     sed -i '2s/^/exclude=mesa*\n/' /etc/yum.repos.d/nobara.repo 
 else 
-    echo -n "Fedora my beloved... "
+    echo -n "Fedora Linux detected... "
     sed -i '2s/^/exclude=mesa*\n/' /etc/yum.repos.d/fedora.repo
     sed -i '2s/^/exclude=mesa*\n/' /etc/yum.repos.d/fedora-updates.repo
 fi
 dnf copr enable @exotic-soc/bc250-mesa -y
 dnf upgrade -y 
 
-# make sure radv_debug option is set in environment
-echo -n "Setting RADV_DEBUG option... "
+# Set RADV_DEBUG environment variable globally
+echo -n "Configuring RADV_DEBUG environment variable... "
 echo 'RADV_DEBUG=nocompute' > /etc/environment
 
-# install segfaults governor
-echo "Installing GPU governor... "
+# Install Oberon GPU governor
+# Fork by mothenjoyer69, originally by Segfault
+echo "Installing Oberon GPU governor..."
 dnf install libdrm-devel cmake make g++ git -y
 git clone https://gitlab.com/mothenjoyer69/oberon-governor.git && cd oberon-governor
 cmake . && make && make install
 systemctl enable oberon-governor.service
 
-# make sure amdgpu and nct6683 options are in the modprobe files and update initrd
-echo -n "Setting amdgpu module option... "
+# Apply kernel module options and regenerate initramfs
+echo -n "Configuring amdgpu kernel module options... "
 echo 'options amdgpu sg_display=0' > /etc/modprobe.d/options-amdgpu.conf
-echo -n "Setting nct6683 module option... "
+echo -n "Configuring nct6683 kernel module options... "
 echo 'nct6683' > /etc/modules-load.d/99-sensors.conf
 echo 'options nct6683 force=true' > /etc/modprobe.d/options-sensors.conf
-echo "OK, regenerating initrd (this may take a while)"
+echo "Regenerating initramfs (this may take a few minutes)..."
 dracut --stdlog=4 --regenerate-all --force
 
-# clear nomodeset from /etc/default/grub and update config
-echo "Fixing up GRUB config..."
+# Clean up GRUB configuration and regenerate GRUB config
+echo "Updating GRUB configuration..."
 sed -i 's/nomodeset//g' /etc/default/grub
 sed -i 's/amdgpu\.sg_display=0//g' /etc/default/grub
 grub2-mkconfig -o /etc/grub2.cfg
 
-# that should do it
-echo "Done! Rebooting system in 15 seconds, ctrl-C now to cancel..."
-sleep 15 && systemctl reboot
+# Final notification and system reboot
+echo "Configuration complete. The system will reboot in 5 seconds. Press Ctrl+C to cancel."
+sleep 5 && systemctl reboot
