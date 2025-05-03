@@ -70,9 +70,9 @@ The `F*T` pins are the tachometer outputs from each respective fan, and the `F*P
 - Kernels older than 6.11ish may need ``amdgpu.sg_display=0`` to be set.
 
 ## Simple setup script
-- This script is designed for Fedora 40+ and should set up everything needed properly, except for flashing the modified firmware. Run at your own risk.
-  - ``curl -s https://raw.githubusercontent.com/buoyantbeaver/bc250-documentation/refs/heads/main/fedora-setup.sh | sh`` 
-- This script is intended for Ubuntu 18.04+ and will set up everything required, except for flashing the modified firmware. Run at your own risk.
+- This script is designed for Fedora 42+ and above. Run at your own risk.
+  - ``curl -s https://raw.githubusercontent.com/buoyantbeaver/bc250-documentation/refs/heads/main/fedora42+.sh | sh`` 
+- This script is untested and intended for Ubuntu 25.04 and above. Run at your own risk.
   - ``curl -s https://raw.githubusercontent.com/buoyantbeaver/bc250-documentation/refs/heads/main/ubuntu-setup.sh | sh``
 - Credit to [neggles](https://github.com/neggles) for the original version.
   
