@@ -13,7 +13,7 @@ echo -n "Adding Mesa repo... "
 UBUNTU_VERSION=$(lsb_release -rs)
 UBUNTU_CODENAME=$(lsb_release -sc)
 
-if (( $(echo "$UBUNTU_VERSION >= 25.04" | bc -l) )); then
+if dpkg --compare-versions "$UBUNTU_VERSION" ge 25.04; then
     echo -n "Ubuntu $UBUNTU_VERSION ($UBUNTU_CODENAME) detected... "
 
     GPG_KEYRING_PATH="/usr/share/keyrings/mesarc.gpg"
