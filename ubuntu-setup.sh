@@ -33,7 +33,7 @@ fi
 # Install Oberon GPU governor
 # Fork by mothenjoyer69, originally by Segfault
 echo "Installing Oberon GPU governor..."
-apt install libdrm-dev cmake make g++ git -y
+apt install libdrm-dev cmake make g++ git pkg-config -y
 git clone https://gitlab.com/mothenjoyer69/oberon-governor.git && cd oberon-governor
 cmake . && make && make install
 systemctl enable oberon-governor.service
