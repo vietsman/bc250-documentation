@@ -24,7 +24,7 @@ else
     echo "Only Fedora-based systems (Fedora, Nobara, Bazzite) are supported by this script."
     exit 1
 fi
-dnf copr enable @exotic-soc/bc250-mesa -y
+dnf copr enable danayer/mesa-git -y
 dnf upgrade -y 
 
 # Install Oberon GPU governor
