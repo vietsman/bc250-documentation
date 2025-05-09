@@ -31,7 +31,7 @@ dnf upgrade -y
 # Fork by mothenjoyer69, originally by Segfault
 echo "Installing Oberon GPU governor..."
 dnf install libdrm-devel cmake make g++ git -y
-git clone https://gitlab.com/mothenjoyer69/oberon-governor.git && cd oberon-governor
+git clone https://github.com/buoyantbeaver/oberon-governor.git && cd oberon-governor
 cmake . && make && make install
 systemctl enable oberon-governor.service
 
