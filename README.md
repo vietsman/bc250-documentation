@@ -1,3 +1,13 @@
+# Disclaimer
+Starting with Fedora 42 and other recent rolling distributions, most kernel-level issues have been resolved. Mesa 25.1 now officially supports the board out of the box. If your distro ships with an older version (e.g. Fedora 42 includes 25.0.4), you’ll only need to manually upgrade Mesa.
+
+# Simple setup script
+- This script is designed for Fedora 42+ and above.
+  - ``curl -s https://raw.githubusercontent.com/buoyantbeaver/bc250-documentation/refs/heads/main/fedora-setup.sh | sh`` 
+- This script is intended for Ubuntu 25.04 and above.
+  - ``curl -s https://raw.githubusercontent.com/buoyantbeaver/bc250-documentation/refs/heads/main/ubuntu-setup.sh | sh``
+- Credit to [neggles](https://github.com/neggles) for the original version.
+
 # About
 This page is for documentation and information on the ASRock/AMD BC-250, and about running it as a general purpose PC. These are compute units sold in a 4u rackmount chassis for the purpose of crypto mining. Thankfully everyone who bought these for that purpose lost a lot of money and is selling them off for cheap!
 
@@ -54,28 +64,7 @@ The `F*T` pins are the tachometer outputs from each respective fan, and the `F*P
   - It will boot, but the GPU is not supported by any drivers and is unlikely to ever be. Everything else seems to work alright, so I guess if you've been kicked in the head recently you could use it for non-GPU focused workloads.
 - MacOS:
   - Next person to ask this will be asked to find out if the PCIe bracket counts as a flared base.
-  
-# Making it work
-## Mesa
-- Upstream support [landed](https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/33116) in Mesa 25.1. If your distro ships this new of a version, or if it has a ``mesa-git`` equivalency, you should be able use them without modification. 
-- You must set ``RADV_DEBUG=nocompute`` in ``/etc/environment`` to resolve issues with Vulkan visual issues.
-- Some OpenGL workloads cause a GPU hang still, and most compute loads will trigger a GPU reset when the compute instance is closed. This would normally be fine, but it is unrecoverable on these boards.
-- Flatpak applications will fail to run due to the bundled mesa not having the required patches. You can temporarily work around this by setting ``FLATPAK_GL_DRIVERS=mesa-git``.
-- If your distro doesn't ship a new enough Mesa, either:
-  - Rebuild Mesa manually with this [this](https://raw.githubusercontent.com/mothenjoyer69/bc250-documentation/refs/heads/main/BC250-mesa.patch) patch.
-  - Alternatively, patched Mesa builds are available via copr, [here](https://copr.fedorainfracloud.org/coprs/g/exotic-soc/bc250-mesa/).
-   
-## Kernel
-- You may need to add ``nomodeset`` to the kernel command line prior to installing the correct mesa version. Don't forget to remove this once they are installed.
-- Kernels older than 6.11ish may need ``amdgpu.sg_display=0`` to be set.
 
-## Simple setup script
-- This script is designed for Fedora 42+ and above. Run at your own risk.
-  - ``curl -s https://raw.githubusercontent.com/buoyantbeaver/bc250-documentation/refs/heads/main/fedora42+.sh | sh`` 
-- This script is untested and intended for Ubuntu 25.04 and above. Run at your own risk.
-  - ``curl -s https://raw.githubusercontent.com/buoyantbeaver/bc250-documentation/refs/heads/main/ubuntu-setup.sh | sh``
-- Credit to [neggles](https://github.com/neggles) for the original version.
-  
 # Advanced
 ## Modified firmware
 ## ***ANY DAMAGE OR ISSUES CAUSED BY FLASHING THIS MODIFIED IMAGE IS YOUR RESPONSIBILITY ENTIRELY***
@@ -91,12 +80,7 @@ The `F*T` pins are the tachometer outputs from each respective fan, and the `F*P
 - VRAM allocation is configured within: ``Chipset -> GFX Configuration -> GFX Configuration``. Set ``Integrated Graphics Controller`` to forced, and ``UMA Mode`` to  ``UMA_SPECIFIED``, and set the VRAM limit to your desired size. 512MB appears to be the best for general APU use. You will have a worse experience overall with a 4/12 split, outside of specific circumstances. Credit to [Segfault](https://github.com/TuxThePenguin0)
 - Many of the newly exposed settings are untested, and could either do nothing, or completely obliterate you and everyone else within a 100km radius. Or maybe they work fine. Be careful, though.
      - There are a number of firmware images floating around with "everything unlocked!". Be very, very cautious of using these.
-- Note: If your board shipped with P4.00G (or any other BIOS revision that modified the memory split) you may need to fully clear the firmware settings as it can apparently get a little stuck. Removing the coin cell and using the CLR_CMOS header should suffice.        
-
-## NCT6686 SuperIO
-- In order for ``lm-sensors`` to recognize the chip (ID ``0xd441``), you must load the nct6683 driver. You can so via ``modprobe nct6683 force=true`` or by adding ``options nct6683 force=true`` to ``/etc/modprobe.d/sensors.conf``, and ``nct6683``to ``/etc/modules-load.d/99-sensors.conf`` and regenerate your initramfs.
-- Once enabled you should see a bunch more sensor data reported, including important temps :)
-- Massive thanks to [yeyus](https://github.com/yeyus) for [this info](https://github.com/mothenjoyer69/bc250-documentation/issues/3).
+- Note: If your board shipped with P4.00G (or any other BIOS revision that modified the memory split) you may need to fully clear the firmware settings as it can apparently get a little stuck. Removing the coin cell and using the CLR_CMOS header should suffice.
 
 ## Performance
 - A GPU governor is available [here](https://gitlab.com/mothenjoyer69/oberon-governor). You should use it. Values are set in /etc/oberon-config.yaml. The defaults should be fine, but you can bump them up if you are experiencing instability (or want a nice space heater)
