@@ -7,28 +7,39 @@ if [[ $(id -u) != "0" ]]; then
     exit 1
 fi
 
-# Configure COPR repository and exclude Mesa packages from the official repositories
-echo -n "Detecting operating system... "
-if grep -qi 'nobara' /etc/system-release; then
-    echo "Nobara Linux detected."
-    sed -i '2s/^/exclude=mesa*\n/' /etc/yum.repos.d/nobara.repo
-# elif grep -qi 'bazzite' /etc/system-release; then
-#     echo "Bazzite Linux detected."
-#     dnf config-manager --save --setopt='*.exclude=mesa*'
-elif grep -qi 'fedora' /etc/system-release; then
-    echo "Fedora Linux detected."
-    sed -i '2s/^/exclude=mesa*\n/' /etc/yum.repos.d/fedora.repo
-    sed -i '2s/^/exclude=mesa*\n/' /etc/yum.repos.d/fedora-updates.repo
-else
-    echo "Unsupported distribution detected."
-    echo "Only Fedora-based systems (Fedora, Nobara, Bazzite) are supported by this script."
-    exit 1
-fi
-dnf copr enable danayer/mesa-git -y
-dnf upgrade -y 
+# List of Mesa 25.1.0 Fedora 43 RPM URLs
+MESA_URLS=(
+  "https://kojipkgs.fedoraproject.org//packages/mesa/25.1.0/1.fc43/x86_64/mesa-libGL-25.1.0-1.fc43.x86_64.rpm"
+  "https://kojipkgs.fedoraproject.org//packages/mesa/25.1.0/1.fc43/x86_64/mesa-dri-drivers-25.1.0-1.fc43.x86_64.rpm"
+  "https://kojipkgs.fedoraproject.org//packages/mesa/25.1.0/1.fc43/x86_64/mesa-filesystem-25.1.0-1.fc43.x86_64.rpm"
+  "https://kojipkgs.fedoraproject.org//packages/mesa/25.1.0/1.fc43/x86_64/mesa-libEGL-25.1.0-1.fc43.x86_64.rpm"
+  "https://kojipkgs.fedoraproject.org//packages/mesa/25.1.0/1.fc43/x86_64/mesa-va-drivers-25.1.0-1.fc43.x86_64.rpm"
+  "https://kojipkgs.fedoraproject.org//packages/mesa/25.1.0/1.fc43/x86_64/mesa-vulkan-drivers-25.1.0-1.fc43.x86_64.rpm"
+  "https://kojipkgs.fedoraproject.org//packages/mesa/25.1.0/1.fc43/x86_64/mesa-libgbm-25.1.0-1.fc43.x86_64.rpm"
+  "https://kojipkgs.fedoraproject.org//packages/mesa/25.1.0/1.fc43/x86_64/mesa-libgbm-devel-25.1.0-1.fc43.x86_64.rpm"
+)
+
+# Directory for temporary downloads
+DOWNLOAD_DIR="/tmp/mesa-rpms"
+mkdir -p "$DOWNLOAD_DIR"
+
+echo "Downloading Mesa 25.1.0 RPMs with curl..."
+for url in "${MESA_URLS[@]}"; do
+  echo "Downloading $(basename "$url")..."
+  curl -L -o "$DOWNLOAD_DIR/$(basename "$url")" "$url"
+done
+
+echo "Installing Mesa 25.1.0 RPMs..."
+sudo rpm -Uvh "$DOWNLOAD_DIR"/mesa*.rpm
+
+echo "Cleaning up..."
+rm -rf "$DOWNLOAD_DIR"
+
+echo "Verification:"
+rpm -q mesa-libGL
 
 # Install Oberon GPU governor
-# Fork by mothenjoyer69, originally by Segfault
+# Thanks to mothenjoyer69 and Segfault
 echo "Installing Oberon GPU governor..."
 dnf install libdrm-devel cmake make g++ git -y
 git clone https://github.com/buoyantbeaver/oberon-governor.git && cd oberon-governor
