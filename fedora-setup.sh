@@ -7,10 +7,15 @@ if [[ $(id -u) != "0" ]]; then
     exit 1
 fi
 
-# Check if it's Fedora 42
-if [ "$fedora_version" != "42" ]; then
-  echo "This script is designed to run only on Fedora 42. Exiting."
-  exit 1
+# Get the Fedora version
+fedora_version=$(rpm -E %fedora)
+
+# Check if the version is 42 or newer
+if [ "$fedora_version" -ge 42 ]; then
+    echo "Fedora $fedora_version detected. Proceeding..."
+else
+    echo "Fedora $fedora_version is older than 42. Exiting..."
+    exit 1
 fi
 
 # Configure COPR repository
