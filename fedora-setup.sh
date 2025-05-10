@@ -27,6 +27,13 @@ git clone https://github.com/buoyantbeaver/oberon-governor.git && cd oberon-gove
 cmake . && make && make install
 systemctl enable oberon-governor.service
 
+# Apply kernel module options and regenerate initramfs
+echo -n "Configuring nct6683 kernel module options... "
+echo 'nct6683' > /etc/modules-load.d/99-sensors.conf
+echo 'options nct6683 force=true' > /etc/modprobe.d/options-sensors.conf
+echo "Regenerating initramfs (this may take a few minutes)..."
+dracut --stdlog=4 --regenerate-all --force
+
 # Clean up GRUB configuration and regenerate GRUB config
 echo "Updating GRUB configuration..."
 sed -i 's/nomodeset//g' /etc/default/grub
