@@ -1,11 +1,14 @@
-# Disclaimer
-Starting with Fedora 42 and other recent rolling distributions, most kernel-level issues have been resolved. Mesa 25.1 now officially supports the board out of the box. If your distro ships with an older version (e.g. Fedora 42 includes 25.0.4), you’ll only need to manually upgrade Mesa.
+# Notes
+- Starting with Fedora 42 and other recent rolling distributions, most kernel-level issues have been resolved. Mesa 25.1 now officially supports the board out of the box. If your distro ships with an older version (e.g. Fedora 42 includes 25.0.4), you’ll only need to manually upgrade Mesa.
+- Bazzite OS 42.20250511 and newer ship with Mesa 25.1 out of the box. However, Flatpak apps are still packaged with Mesa 25.0 (meaning no GPU driver). Until the Flatpak runtime is updated, you can install the mesa-git runtime from the Flathub Beta repository to enable GPU acceleration for Flatpak apps.
 
-# Simple setup script
-- This script is designed for Fedora 42+ and above.
-  - ``curl -s https://raw.githubusercontent.com/buoyantbeaver/bc250-documentation/refs/heads/main/fedora-setup.sh | sh`` 
-- This script is intended for Ubuntu 25.04 and above.
-  - ``curl -s https://raw.githubusercontent.com/buoyantbeaver/bc250-documentation/refs/heads/main/ubuntu-setup.sh | sh``
+# Setup Scripts
+- For Bazzite OS 42.20250511 and later:
+  `curl -s https://raw.githubusercontent.com/buoyantbeaver/bc250-documentation/refs/heads/main/bazzite-setup.sh | sh`
+- For Fedora 42 and later:  
+  `curl -s https://raw.githubusercontent.com/buoyantbeaver/bc250-documentation/refs/heads/main/fedora-setup.sh | sh`
+- For Ubuntu 25.04 and later:  
+  `curl -s https://raw.githubusercontent.com/buoyantbeaver/bc250-documentation/refs/heads/main/ubuntu-setup.sh | sh`
 - Credit to [neggles](https://github.com/neggles) for the original version.
 
 # About
