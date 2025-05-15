@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 # Download the oberon-governor binary to /etc
 curl -L -o /etc/oberon-governor https://github.com/buoyantbeaver/oberon-governor/releases/download/v1.0.0/oberon-governor
 
@@ -41,3 +43,34 @@ systemctl enable oberon-governor
 systemctl start oberon-governor
 
 echo "Oberon Governor installed, configured, enabled, and started."
+
+REQUIRED="42.20250511"
+
+# Extract OSTREE_VERSION without quotes from /etc/os-release
+CURRENT=$(grep '^OSTREE_VERSION=' /etc/os-release | cut -d= -f2 | tr -d "'\"")
+
+# Remove trailing ".0" if present to match format "42.20250513"
+CURRENT=${CURRENT%.0}
+
+if [[ -z "$CURRENT" ]]; then
+  echo "Error: Could not determine current Bazzite OS version." >&2
+  exit 2
+fi
+
+if [[ "$(printf '%s\n%s\n' "$REQUIRED" "$CURRENT" | sort -V | head -n1)" == "$REQUIRED" ]]; then
+  echo "Bazzite OS $CURRENT detected."
+else
+  echo "Your version of Bazzite OS ($CURRENT) is not supported. Please upgrade to version $REQUIRED or newer."
+  exit 1
+fi
+
+mkdir -p /etc/systemd/system/service.d/
+bash -c "printf '[Service]\nEnvironment=FLATPAK_GL_DRIVERS=mesa-git\n' >/etc/systemd/system/service.d/99-flatpak-mesa-git.conf"
+
+flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
+flatpak install --system flathub-beta org.freedesktop.Platform.GL.mesa-git//24.08
+flatpak install --system flathub-beta org.freedesktop.Platform.GL32.mesa-git//24.08
+
+# Final notification and system reboot
+echo "Configuration complete. The system will reboot in 5 seconds. Press Ctrl+C to cancel."
+sleep 5 && systemctl reboot
