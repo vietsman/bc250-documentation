@@ -66,7 +66,7 @@ fi
 
 # Credit to https://redd.it/vbg0tw/
 mkdir -p /etc/systemd/system/service.d/
-bash -c "printf '[Service]\nEnvironment=FLATPAK_GL_DRIVERS=mesa-git\n' >/etc/systemd/system/service.d/99-flatpak-mesa-git.conf"
+sudo bash -c 'echo -e "[Service]\nEnvironment=FLATPAK_GL_DRIVERS=mesa-git" > /etc/systemd/system/service.d/99-flatpak-mesa-git.conf'
 
 # Add the Flathub beta repository
 flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
