@@ -1,15 +1,17 @@
 # Notes
-- Starting with Fedora 42 and other recent rolling distributions, most kernel-level issues have been resolved. Mesa 25.1 now officially supports the board out of the box. If your distro ships with an older version (e.g. Fedora 42 includes 25.0.4), you’ll only need to manually upgrade Mesa.
+- Latest KDE still has bugs where only one instance of an application can be opened and few other issues. Other DEs are fine. Recommend using GNOME.
+- In Fedora 42, Ubuntu 25.04 and other recent rolling distributions, kernel issues have been resolved. Mesa 25.1 now officially supports the board out of the box. If your distro ships with an older version of Mesa, you must manually upgrade Mesa to 25.1 or newer.
 - Bazzite OS 42.20250511 and newer ship with Mesa 25.1 out of the box. However, Flatpak apps are still packaged with Mesa 25.0 (meaning no GPU driver). Until the Flatpak runtime is updated, you can install the mesa-git runtime from the Flathub Beta repository to enable GPU acceleration for Flatpak apps.
 
 # Setup Scripts
 - For Bazzite OS 42.20250511 and later:
   `curl -s https://raw.githubusercontent.com/buoyantbeaver/bc250-documentation/refs/heads/main/bazzite-setup.sh | sh`
-- For Fedora 42 and later:  
+- For Fedora 42 Workstation and later:  
   `curl -s https://raw.githubusercontent.com/buoyantbeaver/bc250-documentation/refs/heads/main/fedora-setup.sh | sh`
 - For Ubuntu 25.04 and later:  
   `curl -s https://raw.githubusercontent.com/buoyantbeaver/bc250-documentation/refs/heads/main/ubuntu-setup.sh | sh`
-- Credit to [neggles](https://github.com/neggles) for the original version.
+
+---
 
 # About
 This page is for documentation and information on the ASRock/AMD BC-250, and about running it as a general purpose PC. These are compute units sold in a 4u rackmount chassis for the purpose of crypto mining. Thankfully everyone who bought these for that purpose lost a lot of money and is selling them off for cheap!
@@ -67,6 +69,9 @@ The `F*T` pins are the tachometer outputs from each respective fan, and the `F*P
   - It will boot, but the GPU is not supported by any drivers and is unlikely to ever be. Everything else seems to work alright, so I guess if you've been kicked in the head recently you could use it for non-GPU focused workloads.
 - MacOS:
   - Next person to ask this will be asked to find out if the PCIe bracket counts as a flared base.
+
+## Simple setup script
+- Credit to [neggles](https://github.com/neggles) for the original version.
 
 # Advanced
 ## Modified firmware
