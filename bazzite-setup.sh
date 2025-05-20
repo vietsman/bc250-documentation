@@ -2,14 +2,21 @@
 
 set -euo pipefail
 
-# Download the oberon-governor binary to /etc
-curl -L -o /etc/oberon-governor https://github.com/buoyantbeaver/oberon-governor/releases/download/v1.0.0/oberon-governor
+# Install binary if not present
+if [[ -f /etc/oberon-governor ]]; then
+  echo "Binary already exists: /etc/oberon-governor"
+else
+  echo "Downloading oberon-governor binary..."
+  curl -L -o /etc/oberon-governor https://github.com/buoyantbeaver/oberon-governor/releases/download/v1.0.0/oberon-governor
+  chmod +x /etc/oberon-governor
+fi
 
-# Make it executable
-chmod +x /etc/oberon-governor
-
-# Create the configuration file
-tee /etc/oberon-config.yaml > /dev/null << 'EOF'
+# Create config if not present
+if [[ -f /etc/oberon-config.yaml ]]; then
+  echo "Config already exists: /etc/oberon-config.yaml"
+else
+  echo "Creating config file..."
+  tee /etc/oberon-config.yaml > /dev/null << 'EOF'
 opps:
   - frequency:
     - min: 1000
@@ -18,9 +25,14 @@ opps:
     - min: 700
     - max: 1000
 EOF
+fi
 
-# Create the systemd service file
-tee /etc/systemd/system/oberon-governor.service > /dev/null << 'EOF'
+# Create systemd service if not present
+if [[ -f /etc/systemd/system/oberon-governor.service ]]; then
+  echo "Systemd service already exists: /etc/systemd/system/oberon-governor.service"
+else
+  echo "Creating systemd service file..."
+  tee /etc/systemd/system/oberon-governor.service > /dev/null << 'EOF'
 [Unit]
 Description=Oberon CPU Frequency Governor
 After=network.target
@@ -34,15 +46,16 @@ Restart=on-failure
 WantedBy=multi-user.target
 EOF
 
-# Reload systemd to recognize the new service
-systemctl daemon-reexec
-systemctl daemon-reload
+  echo "Reloading systemd..."
+  systemctl daemon-reexec
+  systemctl daemon-reload
 
-# Enable and start the service
-systemctl enable oberon-governor
-systemctl start oberon-governor
+  echo "Enabling and starting oberon-governor service..."
+  systemctl enable oberon-governor
+  systemctl start oberon-governor
+fi
 
-echo "Oberon Governor installed, configured, enabled, and started."
+echo "Oberon Governor setup complete."
 
 REQUIRED="42.20250511"
 
@@ -72,10 +85,10 @@ sudo bash -c 'echo -e "[Service]\nEnvironment=FLATPAK_GL_DRIVERS=mesa-git" > /et
 flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
 
 # Install the Mesa Git OpenGL platform runtime (32-bit version 24.08) system-wide from the Flathub beta repo
-flatpak install --system flathub-beta org.freedesktop.Platform.GL.mesa-git//24.08
+flatpak install -y --system flathub-beta org.freedesktop.Platform.GL.mesa-git//24.08
 
 # Install the 32-bit Mesa Git OpenGL platform runtime (version 24.08) system-wide from the Flathub beta repo
-flatpak install --system flathub-beta org.freedesktop.Platform.GL32.mesa-git//24.08
+flatpak install -y --system flathub-beta org.freedesktop.Platform.GL32.mesa-git//24.08
 
 # Final notification and system reboot
 echo "Configuration complete. The system will reboot in 5 seconds. Press Ctrl+C to cancel."
