@@ -11,12 +11,9 @@ else
   chmod +x /etc/oberon-governor
 fi
 
-# Create config if not present
-if [[ -f /etc/oberon-config.yaml ]]; then
-  echo "Config already exists: /etc/oberon-config.yaml"
-else
-  echo "Creating config file..."
-  tee /etc/oberon-config.yaml > /dev/null << 'EOF'
+# Create config 
+echo "Creating config file..."
+tee /etc/oberon-config.yaml > /dev/null << 'EOF'
 opps:
   - frequency:
     - min: 1000
@@ -25,7 +22,6 @@ opps:
     - min: 700
     - max: 1000
 EOF
-fi
 
 # Create systemd service if not present
 if [[ -f /etc/systemd/system/oberon-governor.service ]]; then
