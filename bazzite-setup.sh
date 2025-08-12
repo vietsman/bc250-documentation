@@ -53,39 +53,6 @@ fi
 
 echo "Oberon Governor setup complete."
 
-REQUIRED="42.20250511"
-
-# Extract OSTREE_VERSION without quotes from /etc/os-release
-CURRENT=$(grep '^OSTREE_VERSION=' /etc/os-release | cut -d= -f2 | tr -d "'\"")
-
-# Remove trailing ".0" if present to match format "42.20250513"
-CURRENT=${CURRENT%.0}
-
-if [[ -z "$CURRENT" ]]; then
-  echo "Error: Could not determine current Bazzite OS version." >&2
-  exit 2
-fi
-
-if [[ "$(printf '%s\n%s\n' "$REQUIRED" "$CURRENT" | sort -V | head -n1)" == "$REQUIRED" ]]; then
-  echo "Bazzite OS $CURRENT detected."
-else
-  echo "Your version of Bazzite OS ($CURRENT) is not supported. Please upgrade to version $REQUIRED or newer."
-  exit 1
-fi
-
-# Credit to https://redd.it/vbg0tw/
-mkdir -p /etc/systemd/system/service.d/
-sudo bash -c 'echo -e "[Service]\nEnvironment=FLATPAK_GL_DRIVERS=mesa-git" > /etc/systemd/system/service.d/99-flatpak-mesa-git.conf'
-
-# Add the Flathub beta repository
-flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
-
-# Install the Mesa Git OpenGL platform runtime (32-bit version 24.08) system-wide from the Flathub beta repo
-flatpak install -y --system flathub-beta org.freedesktop.Platform.GL.mesa-git//24.08
-
-# Install the 32-bit Mesa Git OpenGL platform runtime (version 24.08) system-wide from the Flathub beta repo
-flatpak install -y --system flathub-beta org.freedesktop.Platform.GL32.mesa-git//24.08
-
 # Final notification and system reboot
 echo "Configuration complete. The system will reboot in 5 seconds. Press Ctrl+C to cancel."
 sleep 5 && systemctl reboot
