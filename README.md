@@ -5,11 +5,11 @@
 
 # Setup Scripts
 - For latest Bazzite OS:
-  `curl -s https://raw.githubusercontent.com/buoyantbeaver/bc250-documentation/refs/heads/main/oberon-setup.sh | sh`
+  `curl -s https://raw.githubusercontent.com/buoyantbeaver/bc250-documentation/refs/heads/main/oberon-setup.sh | sudo sh`
 - For Fedora 42 Workstation and later:  
-  `curl -s https://raw.githubusercontent.com/buoyantbeaver/bc250-documentation/refs/heads/main/fedora-setup.sh | sh`
+  `curl -s https://raw.githubusercontent.com/buoyantbeaver/bc250-documentation/refs/heads/main/fedora-setup.sh | sudo sh`
 - For Ubuntu 25.04 and later:  
-  `curl -s https://raw.githubusercontent.com/buoyantbeaver/bc250-documentation/refs/heads/main/ubuntu-setup.sh | sh`
+  `curl -s https://raw.githubusercontent.com/buoyantbeaver/bc250-documentation/refs/heads/main/ubuntu-setup.sh | sudo sh`
 
 ---
 
