@@ -1,7 +1,7 @@
 # Notes
 - Latest KDE still has bugs where only one instance of an application can be opened and few other issues. Other DEs are fine. Recommend using GNOME.
 - In Fedora 42, Ubuntu 25.04 and other recent rolling distributions, kernel issues have been resolved. Mesa 25.1 now officially supports the board out of the box. If your distro ships with an older version of Mesa, you must manually upgrade Mesa to 25.1 or newer.
-~~- Bazzite OS 42.20250511 and newer ship with Mesa 25.1 out of the box. However, Flatpak apps are still packaged with Mesa 25.0 (meaning no GPU driver). Until the Flatpak runtime is updated, you can install the mesa-git runtime from the Flathub Beta repository to enable GPU acceleration for Flatpak apps.~~
+- ~~Bazzite OS 42.20250511 and newer ship with Mesa 25.1 out of the box. However, Flatpak apps are still packaged with Mesa 25.0 (meaning no GPU driver). Until the Flatpak runtime is updated, you can install the mesa-git runtime from the Flathub Beta repository to enable GPU acceleration for Flatpak apps.~~
 
 # Setup Scripts
 - For latest Bazzite OS:
