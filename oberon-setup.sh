@@ -7,7 +7,7 @@ if [[ -f /etc/oberon-governor ]]; then
   echo "Binary already exists: /etc/oberon-governor"
 else
   echo "Downloading oberon-governor binary..."
-  curl -L -o /etc/oberon-governor https://github.com/buoyantbeaver/oberon-governor/releases/download/v1.0.0/oberon-governor
+  curl -L -o /etc/oberon-governor https://github.com/buoyantbeaver/oberon-governor/releases/download/v1.0.2/oberon-governor
   chmod +x /etc/oberon-governor
 fi
 
