@@ -52,7 +52,3 @@ EOF
 fi
 
 echo "Oberon Governor setup complete."
-
-# Final notification and system reboot
-echo "Configuration complete. The system will reboot in 5 seconds. Press Ctrl+C to cancel."
-sleep 5 && systemctl reboot
