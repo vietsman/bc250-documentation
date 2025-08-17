@@ -2,13 +2,14 @@
 
 set -euo pipefail
 
+# Check for systemd service if present
 if [[ -f /etc/systemd/system/oberon-governor.service ]]; then
   systemctl stop oberon-governor.service
   systemctl disable oberon-governor.service
   rm /etc/systemd/system/oberon-governor.service
 else
 
-# Check binary if present
+# Check for binary if present
 if [[ -f /etc/oberon-governor ]]; then
   rm /etc/oberon-governor
 fi
@@ -17,7 +18,6 @@ echo "Downloading latest oberon-governor..."
 curl -L -o /etc/oberon-governor https://github.com/vietsman/oberon-governor/releases/latest/download/oberon-governor
 chmod +x /etc/oberon-governor
 
-# Create config 
 echo "Creating config file..."
 tee /etc/oberon-config.yaml > /dev/null << 'EOF'
 opps:
@@ -29,7 +29,7 @@ opps:
     - max: 1000
 EOF
 
-# Create systemd service if not present
+# Create systemd service
 echo "Creating systemd service file..."
 tee /etc/systemd/system/oberon-governor.service > /dev/null << 'EOF'
 [Unit]
