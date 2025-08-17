@@ -2,13 +2,18 @@
 
 set -euo pipefail
 
-# Install binary if not present
-if [[ -f /etc/oberon-governor ]]; then
+if [[ -f /etc/systemd/system/oberon-governor.service ]]; then
   systemctl stop oberon-governor.service
   systemctl disable oberon-governor.service
+  rm /etc/systemd/system/oberon-governor.service
+else
+
+# Check binary if present
+if [[ -f /etc/oberon-governor ]]; then
+  rm /etc/oberon-governor
 fi
 
-echo "Downloading oberon-governor binary..."
+echo "Downloading latest oberon-governor..."
 curl -L -o /etc/oberon-governor https://github.com/vietsman/oberon-governor/releases/latest/download/oberon-governor
 chmod +x /etc/oberon-governor
 
@@ -25,11 +30,8 @@ opps:
 EOF
 
 # Create systemd service if not present
-if [[ -f /etc/systemd/system/oberon-governor.service ]]; then
-  echo "Systemd service already exists: /etc/systemd/system/oberon-governor.service"
-else
-  echo "Creating systemd service file..."
-  tee /etc/systemd/system/oberon-governor.service > /dev/null << 'EOF'
+echo "Creating systemd service file..."
+tee /etc/systemd/system/oberon-governor.service > /dev/null << 'EOF'
 [Unit]
 Description=Oberon GPU Frequency Governor
 After=network.target
@@ -43,13 +45,12 @@ Restart=on-failure
 WantedBy=multi-user.target
 EOF
 
-  echo "Reloading systemd..."
-  systemctl daemon-reexec
-  systemctl daemon-reload
+echo "Reloading systemd..."
+systemctl daemon-reexec
+systemctl daemon-reload
 
-  echo "Enabling and starting oberon-governor service..."
-  systemctl enable oberon-governor
-  systemctl start oberon-governor
-fi
+echo "Enabling and starting oberon-governor service..."
+systemctl enable oberon-governor
+systemctl start oberon-governor
 
 echo "Oberon Governor setup complete."
