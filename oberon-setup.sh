@@ -4,12 +4,13 @@ set -euo pipefail
 
 # Install binary if not present
 if [[ -f /etc/oberon-governor ]]; then
-  echo "Binary already exists: /etc/oberon-governor"
-else
-  echo "Downloading oberon-governor binary..."
-  curl -L -o /etc/oberon-governor https://github.com/buoyantbeaver/oberon-governor/releases/download/v1.0.2/oberon-governor
-  chmod +x /etc/oberon-governor
+  systemctl stop oberon-governor.service
+  systemctl disable oberon-governor.service
 fi
+
+echo "Downloading oberon-governor binary..."
+curl -L -o /etc/oberon-governor https://github.com/vietsman/oberon-governor/releases/latest/download/oberon-governor
+chmod +x /etc/oberon-governor
 
 # Create config 
 echo "Creating config file..."
