@@ -7,7 +7,7 @@ if [[ -f /etc/systemd/system/oberon-governor.service ]]; then
   systemctl stop oberon-governor.service
   systemctl disable oberon-governor.service
   rm /etc/systemd/system/oberon-governor.service
-else
+fi
 
 # Check for binary if present
 if [[ -f /etc/oberon-governor ]]; then
