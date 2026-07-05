@@ -15,11 +15,11 @@ if [[ -f /etc/oberon-governor ]]; then
 fi
 
 echo "Downloading latest oberon-governor..."
-curl -L -o /etc/oberon-governor https://github.com/vietsman/bc250-documentation/releases/latest/download/oberon-governor
+curl -L -o /etc/oberon-governor https://github.com/vietsman/bc250-machine/releases/latest/download/oberon-governor
 chmod +x /etc/oberon-governor
 
 echo "Creating config file..."
-curl -L -o /etc/oberon-config.toml https://github.com/vietsman/bc250-documentation/releases/latest/download/oberon-config.toml
+curl -L -o /etc/oberon-config.toml https://github.com/vietsman/bc250-machine/releases/latest/download/oberon-config.toml
 
 # Create systemd service
 echo "Creating systemd service file..."
