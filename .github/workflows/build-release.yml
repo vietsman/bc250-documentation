@@ -36,8 +36,8 @@ jobs:
           cp cyan-skillfish-governor/target/release/cyan-skillfish-governor oberon-governor
           chmod +x oberon-governor
 
-      - name: Copy config.toml
-        run: cp cyan-skillfish-governor/default-config.toml config.toml
+      - name: Copy oberon-config.toml
+        run: cp cyan-skillfish-governor/default-config.toml oberon-config.toml
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
@@ -45,7 +45,7 @@ jobs:
           tag_name: ${{ github.event.inputs.release_tag }}
           files: |
             oberon-governor
-            config.toml
+            oberon-config.toml
           draft: false
           prerelease: false
         env:
