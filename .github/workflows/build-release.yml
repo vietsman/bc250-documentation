@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
     inputs:
       release_tag:
-        description: 'Release v1.0.3'
-        required: true
+        description: 'Release'
+        required: false
         type: string
 
 jobs:
