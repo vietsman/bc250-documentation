@@ -15,29 +15,20 @@ if [[ -f /etc/oberon-governor ]]; then
 fi
 
 echo "Downloading latest oberon-governor..."
-curl -L -o /etc/oberon-governor https://github.com/vietsman/oberon-governor/releases/latest/download/oberon-governor
+curl -L -o /etc/oberon-governor https://github.com/vietsman/bc250-documentation/releases/latest/download/oberon-governor
 chmod +x /etc/oberon-governor
 
 echo "Creating config file..."
-tee /etc/oberon-config.yaml > /dev/null << 'EOF'
-opps:
-  - frequency:
-    - min: 1000
-    - max: 2000
-  - voltage:
-    - min: 700
-    - max: 1000
-EOF
+curl -L -o /etc/oberon-config.toml https://github.com/vietsman/bc250-documentation/releases/latest/download/oberon-config.toml
 
 # Create systemd service
 echo "Creating systemd service file..."
 tee /etc/systemd/system/oberon-governor.service > /dev/null << 'EOF'
 [Unit]
-Description=Oberon GPU Frequency Governor
-After=network.target
+Description=Oberon GPU Governor
 
 [Service]
-ExecStart=/etc/oberon-governor
+ExecStart=/etc/oberon-governor /etc/oberon-config.toml
 RestartSec=5
 Restart=on-failure
 
