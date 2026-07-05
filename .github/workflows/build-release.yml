@@ -1,0 +1,52 @@
+name: Build and Release Oberon Governor
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Release v1.0.3'
+        required: true
+        type: string
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout cyan-skillfish-governor
+        uses: actions/checkout@v4
+        with:
+          repository: Magnap/cyan-skillfish-governor
+          path: cyan-skillfish-governor
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libdrm-dev
+
+      - name: Build release binary
+        working-directory: cyan-skillfish-governor
+        run: cargo build --release
+
+      - name: Rename binary to oberon-governor
+        run: |
+          cp cyan-skillfish-governor/target/release/cyan-skillfish-governor oberon-governor
+          chmod +x oberon-governor
+
+      - name: Copy config.toml
+        run: cp cyan-skillfish-governor/default-config.toml config.toml
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.event.inputs.release_tag }}
+          files: |
+            oberon-governor
+            config.toml
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
